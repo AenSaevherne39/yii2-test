@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\enum\HistoryEventTypes;
 use app\models\traits\ObjectNameTrait;
 use Yii;
 use yii\db\ActiveQuery;
@@ -133,28 +134,19 @@ class History extends ActiveRecord
     }
 
     /**
-     * @param string $event
      * @return string
-     */
-    public static function getEventTextByEvent($event)
-    {
-        return static::getEventTexts()[$event] ?? $event;
-    }
-
-    /**
-     * @return mixed|string
      */
     public function getEventText()
     {
-        return static::getEventTextByEvent($this->event);
+        return HistoryEventTypes::tryFrom($this->event)?->text();
     }
-
 
     /**
      * @param string $attribute
+     *
      * @return mixed|string|null
      */
-    public function getDetailChangedAttribute($attribute)
+    public function getDetailChangedAttribute(string $attribute): mixed
     {
         $detail = json_decode($this->detail);
         return $detail->changedAttributes->{$attribute} ?? null;
@@ -162,9 +154,10 @@ class History extends ActiveRecord
 
     /**
      * @param string $attribute
+     *
      * @return mixed|string|null
      */
-    public function getDetailOldValue($attribute)
+    public function getDetailOldValue(string $attribute): mixed
     {
         $detail = $this->getDetailChangedAttribute($attribute);
         return $detail->old ?? null;
@@ -172,9 +165,10 @@ class History extends ActiveRecord
 
     /**
      * @param string $attribute
+     *
      * @return mixed|string|null
      */
-    public function getDetailNewValue($attribute)
+    public function getDetailNewValue(string $attribute): mixed
     {
         $detail = $this->getDetailChangedAttribute($attribute);
         return $detail->new ?? null;
@@ -182,9 +176,10 @@ class History extends ActiveRecord
 
     /**
      * @param string $attribute
+     *
      * @return mixed|null
      */
-    public function getDetailData($attribute)
+    public function getDetailData(string $attribute): mixed
     {
         $detail = json_decode($this->detail);
         return $detail->data->{$attribute} ?? null;

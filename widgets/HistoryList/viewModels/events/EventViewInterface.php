@@ -1,8 +1,8 @@
 <?php
 
-namespace app\widgets\HistoryList\events;
+namespace app\widgets\HistoryList\viewModels\events;
 
-interface HistoryEvent
+interface EventViewInterface
 {
     /**
      * Get view name
@@ -14,10 +14,10 @@ interface HistoryEvent
      * Get params for view render
      * @return array
      */
-    public function renderParams(): array;
+    public function renderViewParams(): array;
 
     /**
-     * Get event text for view
+     * Get body text
      * @return string
      */
     public function getBody(): string;

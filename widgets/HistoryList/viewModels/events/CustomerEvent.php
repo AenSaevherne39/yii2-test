@@ -1,27 +1,20 @@
 <?php
 
-namespace app\widgets\HistoryList\events;
+namespace app\widgets\HistoryList\viewModels\events;
 
 use app\models\Customer;
 use app\models\History;
 
-class ChangeHistoryEvent extends AbstractHistoryEvent
+class CustomerEvent extends AbstractEventView
 {
     /**
-     * Event text would be based on this attribute
-     * @var string
+     * @param History $history
+     * @param string $attribute event text would be based on this attribute
      */
-    protected $attribute;
-
-    /**
-     * @param History $model
-     * @param string $attribute
-     */
-    public function __construct(History $model, $attribute = 'type')
-    {
-        $this->model = $model;
-        $this->attribute = $attribute;
-    }
+    public function __construct(
+        public History $history,
+        public string $attribute = 'type'
+    ) {}
 
     /**
      * @inheritDoc
@@ -34,10 +27,10 @@ class ChangeHistoryEvent extends AbstractHistoryEvent
     /**
      * @inheritDoc
      */
-    public function renderParams(): array
+    public function renderViewParams(): array
     {
         return [
-            'model' => $this->model,
+            'model' => $this->history,
             'oldValue' => $this->getNewValue(),
             'newValue' => $this->getOldValue(),
         ];
@@ -51,7 +44,7 @@ class ChangeHistoryEvent extends AbstractHistoryEvent
         $oldValue = $this->getOldValue();
         $newValue = $this->getNewValue();
         return sprintf('%s %s to %s',
-            $this->model->eventText,
+            $this->history->eventText,
             empty($oldValue) ? 'not set' : $oldValue,
             empty($newValue) ? 'not set' : $newValue
         );
@@ -62,7 +55,7 @@ class ChangeHistoryEvent extends AbstractHistoryEvent
      */
     protected function getOldValue()
     {
-        return Customer::getTypeTextByType($this->model->getDetailOldValue($this->attribute));
+        return Customer::getTypeTextByType($this->history->getDetailOldValue($this->attribute));
     }
 
     /**
@@ -70,6 +63,7 @@ class ChangeHistoryEvent extends AbstractHistoryEvent
      */
     protected function getNewValue()
     {
-        return Customer::getTypeTextByType($this->model->getDetailNewValue($this->attribute));
+        return Customer::getTypeTextByType($this->history->getDetailNewValue($this->attribute));
     }
 }
+

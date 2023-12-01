@@ -1,26 +1,21 @@
 <?php
 
-namespace app\widgets\HistoryList\events\fax;
+namespace app\widgets\HistoryList\viewModels\events;
 
 use app\models\Fax;
-use app\widgets\HistoryList\events\CommonHistoryEvent;
 use Yii;
 use yii\helpers\Html;
 
-/**
- * Class FaxEvent
- * @package app\widgets\HistoryList\events\fax
- */
-class FaxEvent extends CommonHistoryEvent
+class FaxEventView extends CommonHistoryEvent
 {
     /**
      * @return array
      */
-    public function renderParams(): array
+    public function renderViewParams(): array
     {
-        $params = parent::renderParams();
+        $params = parent::renderViewParams();
 
-        $fax = $this->model->fax;
+        $fax = $this->history->fax;
         return array_merge($params, [
             'body' => $this->getBody() . ' - ' . $this->getDocumentUrl($fax),
             'footer' => Yii::t('app', '{type} was sent to {group}', [
@@ -28,7 +23,7 @@ class FaxEvent extends CommonHistoryEvent
                 'group' => $this->getGroupText($fax)
             ]),
             'bodyDatetime' => null,
-            'footerDatetime' => $this->model->ins_ts,
+            'footerDatetime' => $this->history->ins_ts,
             'iconClass' => 'fa-fax bg-green'
         ]);
     }
@@ -38,7 +33,7 @@ class FaxEvent extends CommonHistoryEvent
      */
     public function getBody(): string
     {
-        return $this->model->eventText;
+        return $this->history->eventText;
     }
 
     /**

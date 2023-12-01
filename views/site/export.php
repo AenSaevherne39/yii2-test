@@ -9,13 +9,10 @@
 
 use app\models\History;
 use app\widgets\Export\Export;
-use app\widgets\HistoryList\events\HistoryEventFactory;
+use app\widgets\HistoryList\viewModels\factories\HistoryEventFactoryInterface;
 
-$filename = 'history';
-$filename .= '-' . time();
-
-ini_set('max_execution_time', 0);
-ini_set('memory_limit', '2048M');
+/* @var string $filename */
+/* @var HistoryEventFactoryInterface $factory */
 ?>
 
 <?= Export::widget([
@@ -46,9 +43,8 @@ ini_set('memory_limit', '2048M');
         ],
         [
             'label' => Yii::t('app', 'Message'),
-            'value' => function (History $model) {
-                $factory = new HistoryEventFactory($model);
-                $event = $factory->createHistoryEvent();
+            'value' => function (History $model) use ($factory) {
+                $event = $factory->createHistoryEvent($model);
                 return strip_tags($event->getBody());
             }
         ]

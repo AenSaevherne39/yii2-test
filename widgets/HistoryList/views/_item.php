@@ -1,10 +1,11 @@
 <?php
+
 use app\models\search\HistorySearch;
-use app\widgets\HistoryList\events\HistoryEventFactory;
+use app\widgets\HistoryList\viewModels\factories\HistoryEventFactory;
 
 /* @var $this yii\web\View */
-/** @var $model HistorySearch */
+/* @var $model HistorySearch */
 
-$factory = new HistoryEventFactory($model);
-$event = $factory->createHistoryEvent();
-echo $this->render($event->getViewName(), $event->renderParams());
+$factory = Yii::$container->get(HistoryEventFactory::class);
+$event = $factory->createHistoryEvent($model);
+echo $this->render($event->getViewName(), $event->renderViewParams());
