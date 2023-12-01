@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\enum\HistoryEventTypes;
 use app\models\traits\ObjectNameTrait;
 use Yii;
 use yii\db\ActiveQuery;
@@ -28,6 +29,7 @@ use yii\db\ActiveRecord;
  * @property Task $task
  * @property Sms $sms
  * @property Call $call
+ * @property Fax $fax
  */
 class History extends ActiveRecord
 {
@@ -132,60 +134,54 @@ class History extends ActiveRecord
     }
 
     /**
-     * @param $event
-     * @return mixed
-     */
-    public static function getEventTextByEvent($event)
-    {
-        return static::getEventTexts()[$event] ?? $event;
-    }
-
-    /**
-     * @return mixed|string
+     * @return string
      */
     public function getEventText()
     {
-        return static::getEventTextByEvent($this->event);
+        return HistoryEventTypes::tryFrom($this->event)?->text();
     }
 
-
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     *
+     * @return mixed|string|null
      */
-    public function getDetailChangedAttribute($attribute)
+    public function getDetailChangedAttribute(string $attribute): mixed
     {
         $detail = json_decode($this->detail);
-        return isset($detail->changedAttributes->{$attribute}) ? $detail->changedAttributes->{$attribute} : null;
+        return $detail->changedAttributes->{$attribute} ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     *
+     * @return mixed|string|null
      */
-    public function getDetailOldValue($attribute)
+    public function getDetailOldValue(string $attribute): mixed
     {
         $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->old) ? $detail->old : null;
+        return $detail->old ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     *
+     * @return mixed|string|null
      */
-    public function getDetailNewValue($attribute)
+    public function getDetailNewValue(string $attribute): mixed
     {
         $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->new) ? $detail->new : null;
+        return $detail->new ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     *
+     * @return mixed|null
      */
-    public function getDetailData($attribute)
+    public function getDetailData(string $attribute): mixed
     {
         $detail = json_decode($this->detail);
-        return isset($detail->data->{$attribute}) ? $detail->data->{$attribute} : null;
+        return $detail->data->{$attribute} ?? null;
     }
 }

@@ -89,8 +89,8 @@ class Customer extends ActiveRecord
     }
 
     /**
-     * @param $type
-     * @return mixed
+     * @param string $type
+     * @return string
      */
     public static function getTypeTextByType($type)
     {

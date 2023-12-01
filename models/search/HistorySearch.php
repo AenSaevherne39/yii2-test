@@ -26,7 +26,6 @@ class HistorySearch extends History
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -37,12 +36,9 @@ class HistorySearch extends History
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = History::find();
-
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -53,16 +49,13 @@ class HistorySearch extends History
                 'id' => SORT_DESC
             ],
         ]);
-
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
             return $dataProvider;
         }
 
-        $query->addSelect('history.*');
         $query->with([
             'customer',
             'user',
