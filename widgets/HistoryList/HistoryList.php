@@ -20,9 +20,9 @@ class HistoryList extends Widget
     public string $apiUrl = 'site/export';
 
     /**
-     * @var ActiveDataProvider
+     * @var ActiveDataProvider|null
      */
-    public ActiveDataProvider $dataProvider;
+    public ?ActiveDataProvider $dataProvider;
 
     /**
      * @var HistorySearch
@@ -33,11 +33,13 @@ class HistoryList extends Widget
      * HistoryList constructor.
      *
      * @param HistorySearch $searchModel
+     * @param ActiveDataProvider|null $dataProvider
      * @param array $config
      */
-    public function __construct(HistorySearch $searchModel, array $config = [])
+    public function __construct(HistorySearch $searchModel, ?ActiveDataProvider $dataProvider = null, array $config = [])
     {
         $this->searchModel = $searchModel;
+        $this->dataProvider = $dataProvider;
         parent::__construct($config);
     }
 
@@ -49,7 +51,7 @@ class HistoryList extends Widget
         return $this->render('main', [
             'model' => $this->searchModel,
             'linkExport' => $this->getLinkExport(),
-            'dataProvider' => $this->searchModel->search(Yii::$app->request->queryParams),
+            'dataProvider' => $this->dataProvider ?: $this->searchModel->search(Yii::$app->request->queryParams),
         ]);
     }
 

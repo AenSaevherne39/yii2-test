@@ -7,8 +7,5 @@ $this->title = 'Americor Test';
 ?>
 
 <div class="site-index">
-<!--    --><?php //= Export::widget([]) ?>
-    <?= HistoryList::widget([
-//            'dataProvider' => $historyDataProvider,
-    ]) ?>
+    <?= HistoryList::widget([]) ?>
 </div>
