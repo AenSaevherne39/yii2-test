@@ -28,6 +28,7 @@ use yii\db\ActiveRecord;
  * @property Task $task
  * @property Sms $sms
  * @property Call $call
+ * @property Fax $fax
  */
 class History extends ActiveRecord
 {
@@ -132,8 +133,8 @@ class History extends ActiveRecord
     }
 
     /**
-     * @param $event
-     * @return mixed
+     * @param string $event
+     * @return string
      */
     public static function getEventTextByEvent($event)
     {
@@ -150,42 +151,42 @@ class History extends ActiveRecord
 
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     * @return mixed|string|null
      */
     public function getDetailChangedAttribute($attribute)
     {
         $detail = json_decode($this->detail);
-        return isset($detail->changedAttributes->{$attribute}) ? $detail->changedAttributes->{$attribute} : null;
+        return $detail->changedAttributes->{$attribute} ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     * @return mixed|string|null
      */
     public function getDetailOldValue($attribute)
     {
         $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->old) ? $detail->old : null;
+        return $detail->old ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     * @return mixed|string|null
      */
     public function getDetailNewValue($attribute)
     {
         $detail = $this->getDetailChangedAttribute($attribute);
-        return isset($detail->new) ? $detail->new : null;
+        return $detail->new ?? null;
     }
 
     /**
-     * @param $attribute
-     * @return null
+     * @param string $attribute
+     * @return mixed|null
      */
     public function getDetailData($attribute)
     {
         $detail = json_decode($this->detail);
-        return isset($detail->data->{$attribute}) ? $detail->data->{$attribute} : null;
+        return $detail->data->{$attribute} ?? null;
     }
 }

@@ -12,29 +12,49 @@ use Yii;
 class HistoryList extends Widget
 {
     /**
+     * @var HistorySearch
+     */
+    private $searchModel;
+
+    /**
+     * @var string
+     */
+    public $apiUrl = 'site/export';
+
+    /**
+     * HistoryList constructor.
+     *
+     * @param HistorySearch $search
+     * @param array $config
+     */
+    public function __construct(HistorySearch $search, $config = [])
+    {
+        $this->searchModel = $search;
+        parent::__construct($config);
+    }
+
+    /**
      * @return string
      */
     public function run()
     {
-        $model = new HistorySearch();
-
         return $this->render('main', [
-            'model' => $model,
+            'model' => $this->searchModel,
             'linkExport' => $this->getLinkExport(),
-            'dataProvider' => $model->search(Yii::$app->request->queryParams)
+            'dataProvider' => $this->searchModel->search(Yii::$app->request->queryParams)
         ]);
     }
 
     /**
      * @return string
      */
-    private function getLinkExport()
+    protected function getLinkExport()
     {
         $params = Yii::$app->getRequest()->getQueryParams();
         $params = ArrayHelper::merge([
             'exportType' => Export::FORMAT_CSV
         ], $params);
-        $params[0] = 'site/export';
+        $params[0] = $this->apiUrl;
 
         return Url::to($params);
     }
