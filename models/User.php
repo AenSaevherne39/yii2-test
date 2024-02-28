@@ -46,8 +46,8 @@ class User extends ActiveRecord
 
             [['username'], 'unique'],
 
-            ['status', 'default', 'value' => UserStatus::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [UserStatus::STATUS_ACTIVE, UserStatus::STATUS_DELETED, UserStatus::STATUS_HIDDEN]],
+            ['status', 'default', 'value' => UserStatus::STATUS_ACTIVE->value],
+            ['status', 'in', 'range' => UserStatus::getValues()],
         ];
     }
 

@@ -21,4 +21,16 @@ enum UserStatus: int
             self::STATUS_ACTIVE => Yii::t('app', 'Hidden'),
         };
     }
+
+    /**
+     * @return array
+     */
+    public static function getValues(): array
+    {
+        return [
+            self::STATUS_DELETED->value,
+            self::STATUS_HIDDEN->value,
+            self::STATUS_ACTIVE->value,
+        ];
+    }
 }
