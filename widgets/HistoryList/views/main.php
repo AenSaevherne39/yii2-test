@@ -1,6 +1,7 @@
 <?php
 
 use app\models\search\HistorySearch;
+use app\widgets\HistoryList\viewModels\factories\HistoryEventFactory;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\widgets\ListView;
@@ -10,7 +11,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider ActiveDataProvider */
 /* @var $model HistorySearch */
 /* @var $linkExport string */
-
+/* @var HistoryEventFactory $factory */
 ?>
 
 <?php Pjax::begin(['id' => 'grid-pjax', 'formSelector' => false]); ?>
@@ -35,6 +36,7 @@ use yii\widgets\Pjax;
 <?php echo ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView' => '_item',
+    'viewParams' => ['factory' => $factory],
     'options' => [
         'tag' => 'ul',
         'class' => 'list-group'
